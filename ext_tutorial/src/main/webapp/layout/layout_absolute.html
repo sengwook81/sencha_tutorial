@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Absolute Layout</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+	
+</script>
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.layout.container.Absolute"
+		target="_self">Document</a>
+		Absolute 레이아웃은 컨테이너에 추가된 순서대로 배치 되며 x,y 좌표정보를 설정할 수 있다.(Anchor Layout 상속)<BR> 
+		컨테이너의 크기가 변경될 때 자식들의 크기도 변경되지만 위치정보는 변하지 않는다..<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+	Ext.onReady(function() {
+		var panel = Ext.create('Ext.form.Panel', {
+			title : 'Absolute Layout',
+			width : 500,
+			height : 275,
+			layout : {
+				type : 'absolute'
+			// layout-specific configs go here
+			//itemCls: 'x-abs-layout-item',
+			},
+			border : true,
+			url : 'save-form.php',
+			defaultAnchor:"50%",
+			defaultType : 'textfield',
+			items : [ {
+				x : 10,
+				y : 10,
+				xtype : 'label',
+				text : 'Send To:',
+			}, {
+				x : 80,
+				y : 10,
+				name : 'to',
+				anchor : '90%' // anchor width by percentage
+			}, {
+				x : 10,
+				y : 40,
+				xtype : 'label',
+				text : 'Subject:'
+			}, {
+				x : 80,
+				y : 40,
+				name : 'subject',
+				anchor : '90%' // anchor width by percentage
+			}, {
+				x : 0,
+				y : 80,
+				xtype : 'textareafield',
+				name : 'msg',
+				anchor : '100% 100%' // anchor width and height
+			} ],
+			renderTo : Ext.get("content")
+		});
+	});
+</script>
+</html>

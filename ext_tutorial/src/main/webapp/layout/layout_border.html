@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ext Js Border Layout</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+	
+</script>
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.layout.container.Border"
+		target="_self">Document</a> Border Layout 은 Milti Pain 레이아웃으로 north , south , west , east 
+		영역에 대한 속성을 갖는다.
+	<BR> Split 옵션이 존재하는 경우 SplitBar ( Ext.resizer.Splitter ) 가 적절한 위치에 포함되게 된다.
+	<BR> collapsible 옵션을 적용하게되면 해당 영역에대한 접기/펼치기 기능이 활성화 된다.
+	<BR> 각 영역의 경우 flex(Ext.layout.container.Box.flex) 값과 (height|width) 이용하여 화면비율(너비|높이)을 지정할 수 있다. 
+	<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+	Ext.onReady(function() {
+		Ext.create('Ext.panel.Panel', {
+			width : 500,
+			height : 500,
+			title : 'Border Layout',
+			layout : 'border',
+			items : [ {
+				//title : 'South Region is resizable',
+				region : 'north', // position for region
+				xtype : 'panel',
+				split : true, // enable resizing
+				//collapsible : true,
+				margins : '0 5 0 5',
+				height:50
+			}, {
+				title : 'South Region is resizable',
+				region : 'south', // position for region
+				xtype : 'panel',
+				split : true, // enable resizing
+				collapsible : true,
+				margins : '0 5 5 5'
+			}, {
+				columnWidth: .5,
+				// xtype: 'panel' implied by default
+				title : 'West Region is collapsible',
+				region : 'west',
+				xtype : 'panel',
+				margins : '5 0 0 5',
+				width : 200,
+				collapsible : true, // make collapsible
+				id : 'west-region-container',
+				layout : 'fit'
+			}, {
+				columnWidth: .5,
+				title : 'Center Region',
+				region : 'center', // center region is required, no width/height specified
+				xtype : 'panel',
+				layout : 'fit',
+				margins : '5 5 0 0',
+				flex:1
+			} ]
+			,
+			// Ovservable Class 에서 제공하는 이벤트.
+	        listeners: {
+	            add: function (c, i) {
+	            	if(i.xtype == "bordersplitter") {
+	            		console.log(i.xtype,i);
+	            		if(i.xtype.horizontal) {
+	            			i.height = 2;
+	            		}
+	            		else 
+	            		{
+	            			i.width = 2;
+	            		}
+	            	}
+	            }
+	        },
+			renderTo : Ext.getBody()
+		});
+
+	});
+</script>
+</html>

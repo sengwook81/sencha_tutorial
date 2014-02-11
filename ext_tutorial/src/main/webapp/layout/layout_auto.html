@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ext Js Auto Layout</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+</script>
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.layout.container.Accordion"
+		target="_self">Document</a>
+		컨테이너에 지정한 레이아웃이 존재하지 않을경우 기본적으로 적용되는 Layout<BR> 
+		컨테이너의 크기가 변경되어도 자식들의 크기는 고정 (Auto Layout 상속).<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+Ext.onReady(function () {
+	Ext.create('Ext.Panel', {
+	    width: 500,
+	    height: 280,
+	    title: "AutoLayout Panel",
+	    layout: 'auto',
+	    renderTo: document.body,
+	    items: [{
+	        xtype: 'panel',
+	        title: 'Top Inner Panel',
+	        width: '75%',
+	        height: 90
+	    },
+	    {
+	        xtype: 'panel',
+	        title: 'Bottom Inner Panel',
+	        width: '75%',
+	        height: 90
+	    }]
+	});
+	
+});
+</script>
+</html>

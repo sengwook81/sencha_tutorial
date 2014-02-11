@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ext Js AnchorLayout Layout</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+</script>
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.layout.container.Accordion"
+		target="_self">Document</a>
+		Anchor 레이아웃은 컨테이너에 추가된 순서대로 위에서 아래로 배치<BR> 
+		컨테이너의 크기가 변경될 때 자식들의 크기도 변경된다 (Auto Layout 상속).<BR>
+	<div id="content"></div>
+
+</body>
+<script type="text/javascript">
+Ext.onReady(function () {
+	Ext.create('Ext.Panel', {
+	    width: 500,
+	    height: 400,
+	    title: "AnchorLayout Panel",
+	    layout: 'anchor',
+	    renderTo: Ext.getBody(),
+	    items: [
+	        {
+	            xtype: 'panel',
+	            title: '75% Width and 20% Height',
+	            anchor: '30% 30%'
+	        },
+	        {
+	            xtype: 'panel',
+	            title: 'Offset -300 Width & -200 Height',
+	            anchor: '-300 -200'     
+	        },
+	        {
+	            xtype: 'panel',
+	            title: 'Mixed Offset and Percent',
+	            anchor: '-250 20%'
+	        }
+	    ]
+	});
+	
+});
+</script>
+</html>

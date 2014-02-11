@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ext Js Accordion Layout</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+</script>
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.layout.container.Anchor"
+		target="_self">Document</a>
+	여러개의 패널을 아코디언 스타일로 관리하는 레이아웃.<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+	Ext.onReady(function() {
+
+		Ext.create('Ext.panel.Panel', {
+			title : 'Accordion Layout',
+			width : 300,
+			height : 500,
+			defaults : {
+				// applied to each contained panel
+				bodyStyle : 'padding:15px'
+			},
+			layout : {
+				// layout-specific configs go here
+				type : 'accordion',
+				titleCollapse : false,
+				animate : true,
+				activeOnTop : false,
+				multi: true , // 동시에 여러개의 패널을 펼처 놓을수 있게함 
+				fill: true // Panel의 내용을 영역에 맞춤.
+			},
+			items : [ {
+				title : 'Panel 1',
+				html : 'Panel content!'
+			}, {
+				title : 'Panel 2',
+				html : 'Panel content!'
+			}, {
+				title : 'Panel 3',
+				html : 'Panel content!'
+			} ],
+			renderTo : Ext.get("content")
+		});
+
+	})
+</script>
+</html>

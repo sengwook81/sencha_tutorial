@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ext Js Column Layout</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-dev.js">
+</script>
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.layout.container.Column"
+		target="_self">Document</a> Column Layout 
+		방향에 대한 속성없이 컬럼 폭에 대한 설정을 이용하여 Layout 처리.<BR>
+		비율에 대한 정보와 pixel단위의 너비 설정을 사용할 수 있다.
+	<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+Ext.onReady(function () {
+	// All columns are percentages -- they must add up to 1
+	Ext.create('Ext.panel.Panel', {
+	    title: 'Column Layout - Percentage Only',
+	    width: 350,
+	    height: 250,
+	    layout:'column',
+	    defaultType: 'container',
+	    margin: '35 5 5 0',
+	    items: [{
+	        padding: '5 5 5 5',
+	        columnWidth: 0.25,
+	        items:[{
+	        	title: 'Column 1',
+	        	html:"Column 1 Info"
+	        }]
+	    },{
+	        padding: '5 5 5 5',
+	        columnWidth: 0.55,
+	        items:[{
+	        	title: 'Column 2',
+	        	html:"Column 2 Info"
+	        }]
+	    },{
+	        title: 'Column 3',
+	        padding: '5 5 5 5',
+	        columnWidth: 0.20,
+	        html:"Column 1 Info",
+	        items:[
+	               {
+	            	   title:"SubTitle1"
+	               },
+	               {
+	            	   title:"SubTitle2"
+	               }
+	               ]
+	    }],
+	    renderTo: Ext.getBody()
+	});
+	
+	// Pixel 너비와 비율을 혼용 한 예제.
+	Ext.create('Ext.Panel', {
+	    title: 'Column Layout - Mixed',
+	    width: 350,
+	    height: 250,
+	    layout:'column',
+	    items: [{
+	        title: 'Column 1',
+	        width: 120 // 120pixel 너비를 지정.
+	    },{
+	        title: 'Column 2',
+	        columnWidth: 0.7 // 전체 패널 너비에서 120px 를 제외한 영역의 70%를 채운다.
+	    },{
+	        title: 'Column 3',
+	        columnWidth: 0.3 // 전체 패널 너비에서 120px 를 제외한 영역의 30%를 채운다.
+	    }],
+	    renderTo: Ext.getBody()
+	});
+	
+});
+</script>
+
+</html>

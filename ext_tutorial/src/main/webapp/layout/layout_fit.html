@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ext Js Fit Layout</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-dev.js">
+</script>
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.layout.container.Fit"
+		target="_self">Document</a> Fit Layout 
+		단일 자식 아이템을 갖는 기본 레이아웃 클래스.<BR>
+		일반적으로 직접 생성되지 않고 확장 또는 layout속성으로 지정되어 사용된다.
+	<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+Ext.onReady(function () {
+	Ext.create('Ext.panel.Panel', {
+	    title: 'Fit Layout',
+	    width: 300,
+	    height: 150,
+	    layout:'fit',
+	    items: [{
+	        title: 'Inner Panel1',
+	        html: 'This is the inner panel content',
+	        bodyPadding: 20,
+	        border: false
+	    },{
+	        title: 'Inner Panel2',
+	        html: 'This is the inner panel content',
+	        bodyPadding: 20,
+	        border: false
+	    }],
+	    renderTo: Ext.get("content");
+	});
+});
+</script>
+
+</html>
