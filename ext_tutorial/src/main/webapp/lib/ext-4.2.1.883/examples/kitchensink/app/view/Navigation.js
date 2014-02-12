@@ -2,7 +2,7 @@ Ext.define('KitchenSink.view.Navigation', {
     extend: 'Ext.tree.Panel',
     xtype: 'navigation',
     title: 'Examples',
-    rootVisible: false,
+    rootVisible: true,
     lines: false,
     useArrows: true,
     root: {

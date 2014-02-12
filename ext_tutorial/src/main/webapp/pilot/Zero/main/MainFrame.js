@@ -5,6 +5,7 @@ Ext.define("Zero.main.MainFrame", {
 		console.log("Init MainFrame");
 		me = this;
 		me.items = me.getFrame();
+		me.dockedItems = me.getDockedItem();
 		me.callParent(arguments);
 	},
 	getFrame : function() {
@@ -40,5 +41,40 @@ Ext.define("Zero.main.MainFrame", {
                 autoScroll: true
             }]
         }) ];
+	},
+	getDockedItem:function () {
+		 return [{
+	            xtype: 'toolbar',
+	            dock: 'bottom',
+	            ui: 'footer',
+	            items: ['->', {
+	                text: 'Save',
+	                handler: function(){
+	                    if(fp.getForm().isValid()){
+	                        var sb = Ext.getCmp('form-statusbar');
+	                        sb.showBusy('Saving form...');
+	                        fp.getEl().mask();
+	                        fp.getForm().submit({
+	                            url: 'fake.php',
+	                            success: function(){
+	                                sb.setStatus({
+	                                    text:'Form saved!',
+	                                    iconCls:'',
+	                                    clear: true
+	                                });
+	                                fp.getEl().unmask();
+	                            }
+	                        });
+	                    }
+	                }
+	            }]
+	        }/*, 
+	            Ext.create('Ext.ux.StatusBar', {
+	                dock: 'bottom',
+	                id: 'form-statusbar',
+	                defaultText: 'Ready',
+	                plugins: Ext.create('Ext.ux.statusbar.ValidationStatus', {form:'status-form'})
+	            }
+	            )*/];
 	}
 });

@@ -1,6 +1,6 @@
 Ext.define("Zero.main.TopFrame", {
 	extend : "Ext.Panel",
-	layout:'anchor',
+	layout:'',
 	initComponent:function () {
 		me = this;
 		
