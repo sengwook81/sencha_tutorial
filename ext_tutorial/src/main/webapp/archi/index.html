@@ -9,9 +9,22 @@
 <script type="text/javascript" src="../lib/ext-4.2.1.883/examples/shared/include-ext.js"></script>  
 <script type="text/javascript" src="../lib/ext-4.2.1.883/examples/shared/options-toolbar.js"></script>
 -->
-<script type="text/javascript" src="../lib/ext-4.2.1.883/ext-all-debug.js"></script>
-<script type="text/javascript" src="app/app.js" ></script>
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js"></script>
+
 </head>
 <body>
 </body>
+<script type="text/javascript">
+Ext.onReady(function (){
+	Ext.Loader.setConfig({
+	    enabled : true,
+	    paths: {
+	    	'Cmm':'cmm'
+	    }
+	});
+	Ext.require("Ext.form.Panel");
+});
+</script>
+<script type="text/javascript" src="./index.js"></script>
 </html>

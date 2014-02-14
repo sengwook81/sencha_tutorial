@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ext Pilot</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<!-- 
+<script type="text/javascript" src="../lib/ext-4.2.1.883/examples/shared/include-ext.js"></script>  
+<script type="text/javascript" src="../lib/ext-4.2.1.883/examples/shared/options-toolbar.js"></script>
+-->
+<script type="text/javascript" src="../lib/ext-4.2.1.883/ext-all-debug.js"></script>
+
+</head>
+<body>
+</body>
+<script type="text/javascript">
+Ext.onReady(function (){
+	Ext.Loader.setConfig({
+		enabled	: true,
+		paths	: {
+			Archi	: ".",
+		}
+	});
+	
+	Ext.create('Ext.Viewport', {
+		layout:'border',
+		renderTo:Ext.getBody(),
+		items:[Ext.create("App.view.TopFrame",{
+			region:'north',
+			height:100
+		})]
+	});
+})
+</script>
+</html>
