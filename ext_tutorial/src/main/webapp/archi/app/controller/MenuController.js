@@ -19,9 +19,11 @@ Ext.define('App.controller.MenuController', {
                 render: function (c) { console.log("Render Menu",c);},
                 click: function () { console.log("Click Menu"); } 
             },
-            'topmenuitem':{
-                render: function (c) { console.log("Render MenuItem",c);},
-                dblclick: function () { console.log("Click MenuItem"); } 
+            '#topMenu label':{
+                click: function (c) { console.log("Click MenuItem On Controller",c.getXType()); 
+                console.log("Menu Code : " , c);
+                
+                } 
             },
             'leftframe' : {
             	render: function () { console.log("Render Left Frame");}

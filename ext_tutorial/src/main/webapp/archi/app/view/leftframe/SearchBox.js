@@ -1,4 +1,4 @@
-Ext.define('App.view.frame.SearchBox',{
+Ext.define('App.view.leftframe.SearchBox',{
 	extend:'Ext.panel.Panel',
 	layout: {
         type: 'hbox',

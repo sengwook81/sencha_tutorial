@@ -1,0 +1,26 @@
+{
+	success:'true',
+	items:[
+		{
+			msgCode:'COME001',
+			msgName:'메세지1',
+			msg:'메세지 내용1'
+		}, {
+			msgCode:'COME002',
+			msgName:'메세지2',
+			msg:'메세지 내용2'
+		}, {
+			msgCode:'COME003',
+			msgName:'메세지3',
+			msg:'메세지 내용3'
+		}, {
+			msgCode:'COME004',
+			msgName:'메세지4',
+			msg:'메세지 내용4'
+		}, {
+			msgCode:'COME005',
+			msgName:'메세지5',
+			msg:'메세지 내용5'
+		}
+	]
+}

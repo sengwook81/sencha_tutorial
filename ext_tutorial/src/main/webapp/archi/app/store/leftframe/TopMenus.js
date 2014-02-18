@@ -1,0 +1,11 @@
+/**
+ * 
+ */
+Ext.define("App.store.leftframe.SubMenus",{
+	extend:'Ext.data.Store',
+	model:'App.model.leftframe.SubMenu',
+	data:[
+	      {name:'메뉴1',code:'menu001'},
+	      {name:'메뉴2',code:'menu002'}
+	]
+});

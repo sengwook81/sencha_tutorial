@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Store Group</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug.js">
+	
+</script>
+</head>
+<body>
+	<a href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.data.Store"
+		target="_self">Document</a> Store Group <br>
+		Store객체의 그룹 기능 활용.
+	<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+	// 처리할 모델 스키마 정의.
+	Ext.define('User', {
+		extend : 'Ext.data.Model',
+		fields : [ {
+			name : 'id',
+			type : 'int'
+		}, {
+			name : 'name',
+			type : 'string'
+		} ]
+	});
+
+	var userStore;
+	Ext.require('Ext.data.Store');
+	Ext.onReady(function() {
+		userStore = Ext.create('Ext.data.Store', {
+			model: 'User',
+	        autoLoad: {
+	        	// 실제로 로딩이 종료된 후에는 CallBack Method 가 호출된다.
+	        	callback:function(records , operation , success) {
+					console.log(this.getCount(),this.getTotalCount(),success);
+					printStore(this);
+				}
+	        },
+	        buffered:false,
+	        remoteSort:false,
+	        remoteGroup:false, 	// Local Grouping을 사용.
+	        groupField:'name',	// 그룹을 지정하는 기준 필드 정의.
+	        groupDir:'DESC',	// 그룹 정렬 순서.
+	        proxy: {
+	            type: 'ajax',			//Ajax방식을 이용하여 데이터 수
+	            url: 'data/users.json',	// data를 제공하는 url
+	            reader: {
+	                type: 'json',
+	                root: 'users',
+	                successProperty: 'success'
+	            }
+	        }
+		});
+		
+		
+		// Store Data 출력.
+		function printStore(store) {
+			store.each(function (row) {
+				rowData = [];
+				row.fields.each(function (col) {
+					rowData.push(row.get(col.name));
+				});
+				console.log(rowData);
+			},this);
+			// 현재 그루핑 되어있는 정보를 표시
+			console.log(store.getGroups());
+		}
+		
+	});
+</script>
+</html>

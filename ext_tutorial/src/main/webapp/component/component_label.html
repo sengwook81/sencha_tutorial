@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+</script>
+<!-- 
+Ext Js Component Document
+http://docs.sencha.com/extjs/4.2.1/#!/api/Ext
+ -->
+</head>
+<body>
+</body>
+<script type="text/javascript">
+Ext.onReady(function () {
+	
+	Ext.create('Ext.form.Panel', {
+	    title: 'Field with Label',
+	    width: 400,
+	    bodyPadding: 10,
+	    renderTo: Ext.getBody(),
+	    layout: {
+	        type: 'hbox',
+	        align: 'middle'
+	    },
+	    items: [{
+	        xtype: 'textfield',
+	        hideLabel: true,
+	        flex: 1
+	    }, {
+	        xtype: 'label',
+	        forId: 'myFieldId',
+	        text: 'My Awesome Field',
+	        margin: '0 0 0 10'
+	    }]
+	});
+	
+});
+</script>
+</html>

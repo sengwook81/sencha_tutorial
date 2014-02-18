@@ -1,0 +1,10 @@
+{
+    success: true,
+    users: [
+        { id: 1, name: 'Ed' },
+        { id: 4, name: 'Ed' },
+        { id: 2, name: 'Tommy' },
+        { id: 5, name: 'Cavin' },
+        { id: 3, name: 'SengWook' }
+    ]
+}

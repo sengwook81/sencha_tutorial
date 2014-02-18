@@ -8,15 +8,15 @@ Ext.define('App.view.TopFrame', {
 
 		},
 		click : function() {
-			//console.log("Click Who?");
+			console.log("Click Who?");
 		},
 		dblclick : {
 			fn : function() {
-				//console.log("double click");
+				console.log("double click");
 			},
 			// You can also pass 'body' if you don't want click on the header or
 			// docked elements
-			element : 'el'
+			element : 'body'
 		}
 	},
 	initComponent : function() {
@@ -51,7 +51,8 @@ Ext.define('App.view.TopFrame', {
 
 				menuItems.push(Ext.create("App.view.topframe.MenuItem", {
 					width : 100,
-					html : menustore.getAt(i).get('name'),
+					text:menustore.getAt(i).get('name'),
+					config:{code:menustore.getAt(i).get('code'),name:menustore.getAt(i).get('name'),}
 				}));
 
 			}

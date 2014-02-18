@@ -1,0 +1,45 @@
+{
+	success:'true',
+	items:[
+		{
+			menuName:'업무3-1',
+			menuCode:'004001',
+			parentMenu:'004',
+			content:'',
+			leaf:false,
+			items:[
+				{
+					menuName:'업무3-1-1',
+					menuCode:'004001001',
+					parentMenu:'004001',
+					content:'',
+					leaf:true
+				} , {
+					menuName:'업무3-1-2',
+					menuCode:'004001002',
+					parentMenu:'004001',
+					content:'',
+					leaf:true
+				} , {
+					menuName:'업무3-1-3',
+					menuCode:'004001003',
+					parentMenu:'004001',
+					content:'',
+					leaf:true
+				}
+			]
+		},{
+			menuName:'업무3-2',
+			menuCode:'004002',
+			parentMenu:'004',
+			content:'',
+			leaf:true,
+		},{
+			menuName:'업무3-3',
+			menuCode:'004003',
+			parentMenu:'004',
+			content:'',
+			leaf:true
+		}
+	]
+}

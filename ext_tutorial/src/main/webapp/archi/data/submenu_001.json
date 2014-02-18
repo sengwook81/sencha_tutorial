@@ -1,0 +1,12 @@
+{
+    submenu: [
+        { name: "Security", expanded: true, children: [
+            { name: "UserMabage", leaf: true },
+            { name: "Authority", leaf: true }            
+        ] },
+        { name: "Norman", expanded: true, sons: [
+            { name: "Mike", leaf: true },
+            { name: "Harry", leaf: true }            
+        ] }
+    ]
+}

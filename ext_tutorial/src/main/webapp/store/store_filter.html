@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Store Filter</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug.js">
+	
+</script>
+</head>
+<body>
+	<a href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.data.Store"
+		target="_self">Document</a> Store Filter <br>
+		Store객체의 정렬 기능 활용.
+	<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+	// 처리할 모델 스키마 정의.
+	Ext.define('User', {
+		extend : 'Ext.data.Model',
+		fields : [ {
+			name : 'id',
+			type : 'int'
+		}, {
+			name : 'name',
+			type : 'string'
+		} ]
+	});
+
+	var userStore;
+	Ext.require('Ext.data.Store');
+	Ext.onReady(function() {
+		userStore = Ext.create('Ext.data.Store', {
+			model: 'User',
+	        autoLoad: {
+	        	// 실제로 로딩이 종료된 후에는 CallBack Method 가 호출된다.
+	        	callback:function(records , operation , success) {
+					console.log(this.getCount(),this.getTotalCount(),success);
+					printStore(this);
+				}
+	        },
+	        remoteFilter:false, // Local Data에 대한 필터를 적용할 경우 remoteFilter 값을 False로 지정.
+	        // 필터 Array 여러개의 필터를 적용할 수 있다.
+	        // 작성한 필터를 제거할 경우 clearFilter(true) 호출.
+	        filters: [{						// name Property가 'Ed'인 대상건만 처리
+	            property: 'name',
+	            value: /Ed/
+	        },
+	        {
+	        	filterFn:function (item) { // 필터 함수 지정.
+	        		if(item.get('id') == 1)
+	        			return true;
+	        		
+	        		return false;
+	        	}
+	        }
+	        ],
+
+	        proxy: {
+	            type: 'ajax',			//Ajax방식을 이용하여 데이터 수
+	            url: 'data/users.json',	// data를 제공하는 url
+	            reader: {
+	                type: 'json',
+	                root: 'users',
+	                successProperty: 'success'
+	            }
+	        }
+		});
+		
+		
+		// Store Data 출력.
+		function printStore(store) {
+			store.each(function (row) {
+				rowData = [];
+				row.fields.each(function (col) {
+					rowData.push(row.get(col.name));
+				});
+				console.log(rowData);
+			},this);
+		}
+		
+	});
+</script>
+</html>

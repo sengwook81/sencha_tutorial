@@ -19,12 +19,12 @@ Ext.define('App.view.LeftFrame', {
 	},
 
 	craeteMenuSearch: function () {
-		this.searchbox = Ext.create('App.view.frame.SearchBox', { height:20
+		this.searchbox = Ext.create('App.view.leftframe.SearchBox', { height:20
 		});
 		return this.searchbox;
 	},
 	createMenu: function() {
-		this.menu = Ext.create('App.view.frame.SubMenuTree', { flex:1
+		this.menu = Ext.create('App.view.leftframe.SubMenuTree', { flex:1
 		});
 
 		return this.menu;

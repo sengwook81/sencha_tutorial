@@ -3,8 +3,6 @@ Ext.define('App.view.topframe.TopMenu', {
 	id : 'topMenu',
 	layout : 'hbox',
 	initComponent : function() {
-		this.addEvents('click');
 		this.callParent(arguments);
 	}
-//items : menuItems
 });

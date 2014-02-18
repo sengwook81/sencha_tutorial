@@ -1,4 +1,4 @@
-Ext.define('App.view.frame.SubMenuTree', {
+Ext.define('App.view.leftframe.SubMenuTree', {
 	extend : 'Ext.tree.Panel',
 	title : 'Simple Tree',
 	store : Ext.create('Ext.data.TreeStore', {

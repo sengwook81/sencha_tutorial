@@ -1,0 +1,26 @@
+{
+	success:'true',
+	items:[
+		{
+			menuName:'공통',
+			menuCode:'001',
+			parentMenu:'',
+			content:''
+		},{
+			menuName:'업무1',
+			menuCode:'002',
+			parentMenu:'',
+			content:''
+		},{
+			menuName:'업무2',
+			menuCode:'003',
+			parentMenu:'',
+			content:''
+		},{
+			menuName:'업무3',
+			menuCode:'004',
+			parentMenu:'',
+			content:''
+		}
+	]
+}

@@ -1,0 +1,106 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+	
+</script>
+<!-- 
+Ext Js Component Document
+http://docs.sencha.com/extjs/4.2.1/#!/api/Ext
+ -->
+</head>
+<body>
+</body>
+<script type="text/javascript">
+
+/**
+ * 메뉴처리 처리를 위한 모델.
+ * 메뉴명 , 메뉴코드 , 상위 메뉴코드 , Content정보를 갖는다.
+ */
+Ext.define('Menu',{
+	extend : 'Ext.data.Model',
+	fields : [ {
+		name : 'menuName',		// 메뉴
+		type : 'string'
+	}, {
+		name : 'menuCode',		// 메뉴코
+		type : 'string'
+	}, {
+		name : 'parentMenu',	// 부모메뉴코
+		type : 'string'
+	}, {
+		name : 'content',		// 메뉴 Content
+		type : 'string'
+	}, {
+		name : 'leaf',		// 메뉴 Content
+		type : 'boolean',
+		defaultValue: true,
+		persist : false
+	}, {
+		name : 'expanded',		// 메뉴 Content
+		type : 'boolean',
+		defaultValue: true,
+		persist : false
+	}
+	]
+});
+
+Ext.define('AjaxStore', {
+	extend:'Ext.data.TreeStore',
+	model: 'Menu',
+	storeId:'subMenu',
+	autoLoad: false,
+    proxy: {
+        type: 'ajax',	// Ajax방식을 이용하여 데이터 수
+        url: '../project/data/frame/submenu001.json',	// data를 제공하는 url 현제 페이지 번호 , 페이지 건수, 시작
+								// , 종료 번호를 전달,
+        						// 실제요청은
+								// data/users.json?_dc=1392616287947&page=1&start=0&limit=25
+        reader: {
+            type: 'json',
+            root: 'items',
+            successProperty: 'success'
+        }
+    }
+});
+
+var store = Ext.create('AjaxStore');
+store.load();
+	console.log(store);
+	Ext.onReady(function() {
+		var treeP = Ext.create('Ext.tree.Panel', {
+			renderTo : Ext.getBody(),
+			width : 350,
+			height : 250,
+			store : store,
+			rootVisible : false,
+			 hideHeaders: true,
+			columns: [
+			          { xtype: 'treecolumn',  dataIndex: 'menuName', flex: 1 }
+			      ]
+		});
+		
+		Ext.create("Ext.panel.Panel",{
+			text:"Click",
+			renderTo : Ext.getBody(),
+			width : 50,
+			height : 30,
+			listeners: {
+		        click: {
+		            element: 'el', //bind to the underlying el property on the panel
+		            fn: function(){ 
+		            	console.log('click el'); 
+		            	treeP.getStore().proxy.url = '../project/data/frame/submenu004.json';
+		            	treeP.getStore().load();
+		            }
+		        },
+			}
+
+		});
+	});
+</script>
+</html>

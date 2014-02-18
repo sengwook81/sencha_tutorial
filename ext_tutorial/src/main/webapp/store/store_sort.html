@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Store Sort</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug.js">
+	
+</script>
+</head>
+<body>
+	<a href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.data.Store"
+		target="_self">Document</a> Store Sort <br>
+		Store객체의 정렬 기능 활용.
+	<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+	// 처리할 모델 스키마 정의.
+	Ext.define('User', {
+		extend : 'Ext.data.Model',
+		fields : [ {
+			name : 'id',
+			type : 'int'
+		}, {
+			name : 'name',
+			type : 'string'
+		} ]
+	});
+
+	var userStore;
+	Ext.require('Ext.data.Store');
+	Ext.onReady(function() {
+		userStore = Ext.create('Ext.data.Store', {
+			model: 'User',
+	        autoLoad: {
+	        	// 실제로 로딩이 종료된 후에는 CallBack Method 가 호출된다.
+	        	callback:function(records , operation , success) {
+					console.log(this.getCount(),this.getTotalCount(),success);
+					printStore(this);
+				}
+	        },
+	        //sortOnLoad: true, // Default True 데이터 로딩후 sorting을 적용한다. remoteSort가 true로 설정된 경우 무시.
+	        remoteSort: false, // Store 에서 Proxy를 사용한 경우 remoteSort 값이 true 로 되어있는 경우 
+	        				   // 요청 Url에 sorting 정보가 포함되어 전송되게 된다.
+	        				   // 조회 결과에대해 sort 처리를 하고자 할경우 removeSort값을 false로 설정해야함.
+	        				   // True 일 경우 실제요청은 data/users.json?_dc=1392616287947&page=1&start=0&limit=25
+	        				   // 과 같이 현재 페이지 번호 , 페이지 건수, 시작 , 종료 번호를 전달
+	        sorters: [
+	                  {
+	                	  property:'name' , 	// Model의 name 필드에 대해 내림차순 정렬을 적용.
+	                	  direction:'DESC'
+	               	  },
+	               	  {
+	                	  property:'id' , 
+	                	  direction:'ASC'
+	               	  },
+			],
+	        proxy: {
+	            type: 'ajax',	//Ajax방식을 이용하여 데이터 수
+	            url: 'data/users.json',	// data를 제공하는 url 
+	            						
+	            reader: {
+	                type: 'json',
+	                root: 'users',
+	                successProperty: 'success'
+	            }
+	        }
+		});
+		
+		
+		// Store Data 출력.
+		function printStore(store) {
+			store.each(function (row) {
+				rowData = [];
+				row.fields.each(function (col) {
+					rowData.push(row.get(col.name));
+				});
+				console.log(rowData);
+			},this);
+		}
+		
+	});
+</script>
+</html>

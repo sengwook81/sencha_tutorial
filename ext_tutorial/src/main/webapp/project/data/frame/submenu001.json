@@ -1,0 +1,49 @@
+{
+	success:'true',
+	items:[
+		{
+			menuName:'권한관리',
+			menuCode:'001001',
+			parentMenu:'001',
+			content:'',
+			leaf:false,
+			expanded: false,
+			expandable: true,
+			items:[
+				{
+					menuName:'사용자권한관리',
+					menuCode:'001001001',
+					parentMenu:'001001',
+					content:'',
+					leaf:true
+				} , {
+					menuName:'그룹권한관리',
+					menuCode:'001001002',
+					parentMenu:'001001',
+					content:'',
+					leaf:true
+				} , {
+					menuName:'리소스권한관리',
+					menuCode:'001001003',
+					parentMenu:'001001',
+					content:'',
+					leaf:true
+				}
+			]
+		},{
+			menuName:'메세지관리',
+			menuCode:'001002',
+			parentMenu:'001',
+			content:'Common.view.msg.Message',
+			leaf:true,
+			expanded: false,
+		},{
+			menuName:'시스템관리',
+			menuCode:'001003',
+			parentMenu:'001',
+			content:'',
+			leaf:true,
+			expanded: false
+		}
+	]
+}
