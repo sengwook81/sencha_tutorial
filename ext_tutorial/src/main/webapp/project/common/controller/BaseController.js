@@ -26,6 +26,38 @@ Ext.define("Common.controller.BaseController",{
 	init:function () { 
 		var me = this;
 		console.log("Base Controller : " ,this);
+		
+		var tokenDelimiter = ':';
+		
+		 Ext.History.on('change', function(token){
+			 
+			 console.log(token);
+			 var childTab = me.getCenterFrame().child('#'+token);
+			 me.getCenterFrame().setActiveTab(childTab);
+			 /*
+			 if(token == 'mainpage')
+			 {
+				 Ext.History.add('mainpage');
+			 }
+			 */
+			 
+			 /*
+		        if(token){
+		            var parts = token.split(tokenDelimiter);
+		            var tabPanel = Ext.getCmp(parts[0]);
+		            var tabId = parts[1];
+		            
+		            tabPanel.show();
+		            tabPanel.setActiveTab(tabId);
+		        }else{
+		            // This is the initial default state.  Necessary if you navigate starting from the
+		            // page without any existing history token params and go back to the start state.
+		        	me.getCenterFrame().setActiveTab(0);
+		        	me.getCenterFrame().getItem(0).setActiveTab(0);
+		        }
+		        */
+		    });
+		 
 		me.control({
 			'topMenu': {
 				render: function () { 
@@ -39,9 +71,13 @@ Ext.define("Common.controller.BaseController",{
 					console.log("Click Top MenuItem",el);
 					me.topMenuChange(el.getMenuCode());
 				}
-			}
+			},'centerFrame' : {
+				afterrender : function () {
+					//Ext.History.add('mainpage');
+				}
+			},
 			// 메인프레임의 탭 종료시 호출되는 이벤트.
-			, 'centerFrame > panel': {
+			'centerFrame > panel': {
 				close:function (panel , eOpts) {
 					console.log("Tab Close" , panel , eOpts);
 				}
@@ -67,7 +103,11 @@ Ext.define("Common.controller.BaseController",{
 								
 								if(Ext.ClassManager.isCreated('Common.controller.MessageController')){
 
-								    // ... controller has already been loaded and init ... 
+									childTab = me.getCenterFrame().add(Ext.create(record.get('content'),{
+										closable:true,
+										itemId:record.get('menuCode'),
+										title:record.get('menuName')
+									}));
 
 								}else{
 								    // we need to auto-load that controller using Ext.require()
@@ -90,6 +130,8 @@ Ext.define("Common.controller.BaseController",{
 								}
 							}
 						}
+						// Hash 히스토리 등록.
+						Ext.History.add(record.get('menuCode'));
 						me.getCenterFrame().setActiveTab(childTab);
 					}
 				}

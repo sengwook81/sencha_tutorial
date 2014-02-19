@@ -1,0 +1,120 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Grid Row Edit</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+	
+</script>
+<!-- 
+Ext Js Component Document
+
+ -->
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.grid.plugin.RowEditing"
+		target="_self">Document</a><BR>
+		그리그 플러그인을 사용하여 Row 단위 Edit 기능을 부여한다.<BR>
+		Edit가 시작되면 Floating Dialog가 해당 Row의 Editable Cell을 처리하게 되며<BR> 
+		각 셀별로 Edit Component를 지정할 수 있다.
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+	Ext.onReady(function() {
+		Ext.create('Ext.data.Store', {
+		    storeId:'simpsonsStore',
+		    fields:['name', 'email', 'phone',{name:'regdt',type:'string'},'chk'
+		    ],
+		    data: [
+		        {"name":"Lisa", "email":"lisa@simpsons.com", "phone":"555-111-1224",'regdt':'2013-05-01','chk':true},
+		        {"name":"Bart", "email":"bart@simpsons.com", "phone":"555-222-1234",'regdt':'2013-05-01','chk':true},
+		        {"name":"Homer", "email":"home@simpsons.com", "phone":"555-222-1244",'regdt':'2013-05-01','chk':true},
+		        {"name":"Marge", "email":"marge@simpsons.com", "phone":"555-222-1254",'regdt':'2013-05-01','chk':false}
+		    ]
+		});
+
+		Ext.create('Ext.grid.Panel', {
+		    title: 'Simpsons',
+		    store: Ext.data.StoreManager.lookup('simpsonsStore'), // DataStore 지정. 
+		    columns: [
+		        {header: 'Name',  dataIndex: 'name', editor: 'textfield'},
+		        {header: 'Email', dataIndex: 'email', flex:1,
+		            editor: { // Editor를 지정 Form field 에 사용되는 xtype등을 사용할 수 있다.
+		                xtype: 'textfield',
+		                allowBlank: false
+		            }
+		        },
+		        {header: 'Phone', dataIndex: 'phone'},
+		        {header: 'RegDate', dataIndex: 'regdt', 
+		        	format: 'Y-m-d',
+		        	renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+		        	editor: {
+		        		xtype:'datefield',
+		        		format: 'Y-m-d',
+		        		submitFormat:'c'
+		        	}
+		        },
+		        {header: 'Chk', dataIndex: 'chk', 
+		        	align:'center',
+		        	xtype:'checkcolumn',
+		        	stopSelection: false,
+		        	editor: {
+		        		xtype:'checkboxfield',
+		        	}
+		        },{
+		        	header:'Del',
+		            xtype: 'actioncolumn',
+		            width:100,
+		            sortable: false,
+		            emptyCellText:'empty',
+		            text:"Delete",
+	                altText:"altDel",
+		            items: [{
+		                icon: '../shared/icons/fam/delete.gif',
+		                tooltip: 'Delete Row',
+		                handler: function(grid, rowIndex, colIndex) {
+		                	Ext.data.StoreManager.lookup('simpsonsStore').removeAt(rowIndex); 
+		                }
+		            }]
+		        }
+		    ],
+		    selModel: {
+	            selType: 'cellmodel' // cellmodel 
+	       	 },
+		    frame:true,
+		    plugins: [
+				Ext.create('Ext.grid.plugin.CellEditing', {
+				    clicksToEdit: 1
+				})
+		    ],
+		    height: 200,
+		    width: 600,
+		    renderTo : Ext.get("content")
+		});
+		
+		Ext.widget('button',{
+			text:'print',
+			width:100,
+			height:50,
+			renderTo : Ext.getBody(),
+			handler:function () {
+				var me = this;
+				console.log("CLICK");
+				me.printStore(Ext.data.StoreManager.lookup('simpsonsStore'));
+			},
+			printStore:function (store) {
+				store.each(function (row) {
+					rowData = [];
+					row.fields.each(function (col) {
+						rowData.push(row.get(col.name));
+					});
+					console.log(rowData);
+				},this);
+			}
+		});
+	});
+</script>
+</html>

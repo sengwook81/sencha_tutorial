@@ -18,17 +18,22 @@ Ext.define("Common.controller.MessageController",{
 				},
 				'messageview > grid': {
 					itemdblclick:function (el, record, item, index, e, eOpts) { 
-						var editForm = Ext.create('Common.view.msg.MessageEdit',{});
-						 form = editForm.down('form');
-						 editForm.show();
+						var messageWindow = Ext.getCmp('MessageWindow');
+						console.log(el,messageWindow);
+						if(!el.editwindow) {
+							el.editwindow = Ext.create('Common.view.msg.MessageEdit',{
+								Id:'MessageWindow'
+							});
+						}
+						 form = el.editwindow.down('form');
+						 el.editwindow.show();
 						 form.loadRecord(record);
-						 editForm.down('button[action=save]').on('click', function(btn) {
-						        var rec = form.getRecord(),
-						            values = form.getValues();
-
-						        rec.set(values);
-						        editForm.close();
-						    });
+						 el.editwindow.down('button[action=save]').on('click', function(btn) {
+					        var rec = form.getRecord(),
+					            values = form.getValues();
+					        rec.set(values);
+					        el.editwindow.close();
+					    });
 					} 
 				},
 		});
