@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ext Js Accordion Layout</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+	
+</script>
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.layout.container.Anchor"
+		target="_self">Document</a> 여러개의 패널을 아코디언 스타일로 관리하는 레이아웃.
+	<BR>
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+function printStore (store) {
+	store.each(function (row) {
+		rowData = [];
+		row.fields.each(function (col) {
+			rowData.push(row.get(col.name));
+		});
+		console.log(rowData);
+	},this);
+}
+
+Ext.onReady(function() {
+	var nodestore = Ext.create('Ext.data.Store', {
+	    storeId:'nodestore',
+	    fields:['node_id', 'node_addr', 'node_home','node_user','bhadoop','bhive','bhbase','bzk','hadoop'],
+	    data: { 'items': 
+	    	[{"delflag":false,"flag":false,"node_id":1,"node_addr":"name1","node_name":"네임서버","node_home":"/home/hmanager","node_user":"hmanager","node_password":"hadoop","bhadoop":true,"bhive":true,"bhbase":true,"bzk":true,"hadoop":{"node_id":1,"app_type":"nn","app_port":0,"installed":false,"app_name":"Hadoop"},"hive":{"node_id":1,"app_type":"mysql","meta_host":"appserver","meta_port":3306,"installed":false,"app_name":"Hive"},"hbase":{"node_id":1,"app_type":"hm","app_port":0,"installed":false,"app_name":"Hbase"},"zk":{"node_id":1,"app_type":"1","app_port":0,"installed":false,"app_name":"Zookeeper"},"status":"FAIL","installed":false,"app_name":"네임서버","node_Apps":[{"node_id":1,"app_type":"nn","app_port":0,"installed":false,"app_name":"Hadoop"},{"node_id":1,"app_type":"mysql","meta_host":"appserver","meta_port":3306,"installed":false,"app_name":"Hive"},{"node_id":1,"app_type":"hm","app_port":0,"installed":false,"app_name":"Hbase"},{"node_id":1,"app_type":"1","app_port":0,"installed":false,"app_name":"Zookeeper"}]},{"delflag":false,"flag":false,"node_id":5,"node_addr":"data1","node_name":"Data1","node_home":"/home/hmanager","node_user":"hmanager","node_password":"hadoop","bhadoop":true,"bhive":false,"bhbase":true,"bzk":false,"hadoop":{"node_id":5,"app_type":"dn","app_port":0,"installed":false,"app_name":"Hadoop"},"hive":null,"hbase":{"node_id":5,"app_type":"rs","app_port":0,"installed":false,"app_name":"Hbase"},"zk":null,"status":"FAIL","installed":false,"app_name":"Data1","node_Apps":[{"node_id":5,"app_type":"dn","app_port":0,"installed":false,"app_name":"Hadoop"},{"node_id":5,"app_type":"rs","app_port":0,"installed":false,"app_name":"Hbase"}]},{"delflag":false,"flag":false,"node_id":6,"node_addr":"data2","node_name":"Data2","node_home":"/home/hmanager","node_user":"hmanager","node_password":"hadoop","bhadoop":true,"bhive":false,"bhbase":false,"bzk":false,"hadoop":{"node_id":6,"app_type":"dn","app_port":0,"installed":false,"app_name":"Hadoop"},"hive":null,"hbase":null,"zk":null,"status":"FAIL","installed":false,"app_name":"Data2","node_Apps":[{"node_id":6,"app_type":"dn","app_port":0,"installed":false,"app_name":"Hadoop"}]}]
+	    },
+	    proxy: {
+	        type: 'memory',
+	        reader: {
+	            type: 'json',
+	            root: 'items'
+	        }
+	    }    
+	});
+	
+	
+	Ext.define('NodeList',{
+		extend:'Ext.form.Panel',
+		requires: ['Ext.grid.*','Ext.form.*','Ext.layout.container.Column'],
+		xtype:'node-list',
+/* 		frame:true,
+ */		bodyPadding:5,
+		layout:'column',
+		initComponent:function () {
+			Ext.apply(this,{
+				width:400,
+				fieldDefaults:{
+					labelAlign:'left',
+					labelWidth:90,
+					anchor:'100%',
+					msgTarget:'side'		// ?????
+				},
+				items: [
+				     {
+				    	columnWidth:1,
+				    	height           : 150,
+	                	xtype: 'gridpanel',
+	                	store: Ext.data.StoreManager.lookup('nodestore'), // DataStore 지정. 
+	        		    columns: [
+	        		        {header: 'ID',  dataIndex: 'node_id' , width:30},
+	        		        {header: 'Name',  dataIndex: 'node_addr'},
+	        		        {header: 'User',  dataIndex: 'node_user'},
+	        		        {header: 'Home',  dataIndex: 'node_home'},
+						],
+		                listeners: {
+		                    scope: this,
+		                    selectionchange: this.onGridSelectionChange
+		                }
+				   },
+				   {
+				    	columnWidth:1,
+				    	height           : 200,
+	                	xtype: 'fieldset',
+	                	layout: 'anchor',
+	                	margin: '10 0 0 0',
+	                	bodyPadding:5,
+	        		 	items:[
+	        		 		{
+	        		 			xtype:'textfield',
+	        		 			name:'node_id',
+	        		 			fieldLabel: 'ID'
+	        		 		},
+	        		 		{
+	        		 			xtype:'textfield',
+	        		 			name:'node_addr',
+	        		 			fieldLabel: 'NAME'
+	        		 		},
+	        		 		{
+	        		 			xtype:'textfield',
+	        		 			name:'node_user',
+	        		 			fieldLabel: 'USER'
+	        		 		},
+	        		 		{
+	        		 			xtype:'textfield',
+	        		 			name:'node_home',
+	        		 			fieldLabel: 'HOME'
+	        		 		},
+	        		 		{
+	        		 			xtype:'checkboxgroup',
+	        		 			fieldLabel:'Apps',
+	        		 			columns: 4,
+	        		 			items:[{
+	        		 				boxLabel:'Hadoop',name:'bhadoop'
+	        		 			},{
+	        		 				boxLabel:'HBase',name:'bhbase'
+	        		 			},{
+	        		 				boxLabel:'Hive',name:'bhive'
+	        		 			},{
+	        		 				boxLabel:'Zookeeper',name:'bzk'
+	        		 			},]
+	        		 		},
+	        		 		{
+	        		 			xtype:'textfield',
+	        		 			name:'hadoop',
+	        		 			fieldLabel: 'HOME'
+	        		 		},
+	        		 	]
+				   }
+				]
+			}
+			);
+			console.log(this.items);
+			printStore(Ext.data.StoreManager.lookup('nodestore'));
+			this.callParent();
+		},
+		onGridSelectionChange:function(model, records) {
+			console.log(records[0]);
+	        var rec = records[0];
+	        if (rec) {
+	            this.getForm().loadRecord(rec);
+	        }
+		}
+	}),
+	Ext.create('Ext.window.Window', {
+	    title: 'NodeList',
+	    height:400,
+	    width: 600,
+	    layout: 'fit',
+	    items: {  // Let's put an empty grid in just to illustrate fit layout
+	        xtype: 'node-list'
+	    }
+	}).show();
+});
+</script>
+</html>

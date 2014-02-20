@@ -1,0 +1,67 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Grid Row Edit</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
+	
+</script>
+<!-- 
+Ext Js Component Document
+
+ -->
+</head>
+<body>
+	<a
+		href="http://docs.sencha.com/extjs/4.2.1/#!/api/Ext.grid.plugin.RowEditing"
+		target="_self">Document</a><BR>
+		그리그 플러그인을 사용하여 Row 단위 Edit 기능을 부여한다.<BR>
+		Edit가 시작되면 Floating Dialog가 해당 Row의 Editable Cell을 처리하게 되며<BR> 
+		각 셀별로 Edit Component를 지정할 수 있다.
+	<div id="content"></div>
+</body>
+<script type="text/javascript">
+function printStore (store) {
+	store.each(function (row) {
+		rowData = [];
+		row.fields.each(function (col) {
+			rowData.push(row.get(col.name));
+		});
+		console.log(rowData);
+	},this);
+}
+
+	Ext.onReady(function() {
+		Ext.create('Ext.data.Store', {
+		    storeId:'simpsonsStore',
+		    fields:['node_id', 'node_addr', 'node_home','node_user'],
+		    data: { 'items': 
+		    	[{"delflag":false,"flag":false,"node_id":1,"node_addr":"name1","node_name":"네임서버","node_home":"/home/hmanager","node_user":"hmanager","node_password":"hadoop","bhadoop":true,"bhive":true,"bhbase":true,"bzk":true,"hadoop":{"node_id":1,"app_type":"nn","app_port":0,"installed":false,"app_name":"Hadoop"},"hive":{"node_id":1,"app_type":"mysql","meta_host":"appserver","meta_port":3306,"installed":false,"app_name":"Hive"},"hbase":{"node_id":1,"app_type":"hm","app_port":0,"installed":false,"app_name":"Hbase"},"zk":{"node_id":1,"app_type":"1","app_port":0,"installed":false,"app_name":"Zookeeper"},"status":"FAIL","installed":false,"app_name":"네임서버","node_Apps":[{"node_id":1,"app_type":"nn","app_port":0,"installed":false,"app_name":"Hadoop"},{"node_id":1,"app_type":"mysql","meta_host":"appserver","meta_port":3306,"installed":false,"app_name":"Hive"},{"node_id":1,"app_type":"hm","app_port":0,"installed":false,"app_name":"Hbase"},{"node_id":1,"app_type":"1","app_port":0,"installed":false,"app_name":"Zookeeper"}]},{"delflag":false,"flag":false,"node_id":5,"node_addr":"data1","node_name":"Data1","node_home":"/home/hmanager","node_user":"hmanager","node_password":"hadoop","bhadoop":true,"bhive":false,"bhbase":true,"bzk":false,"hadoop":{"node_id":5,"app_type":"dn","app_port":0,"installed":false,"app_name":"Hadoop"},"hive":null,"hbase":{"node_id":5,"app_type":"rs","app_port":0,"installed":false,"app_name":"Hbase"},"zk":null,"status":"FAIL","installed":false,"app_name":"Data1","node_Apps":[{"node_id":5,"app_type":"dn","app_port":0,"installed":false,"app_name":"Hadoop"},{"node_id":5,"app_type":"rs","app_port":0,"installed":false,"app_name":"Hbase"}]},{"delflag":false,"flag":false,"node_id":6,"node_addr":"data2","node_name":"Data2","node_home":"/home/hmanager","node_user":"hmanager","node_password":"hadoop","bhadoop":true,"bhive":false,"bhbase":false,"bzk":false,"hadoop":{"node_id":6,"app_type":"dn","app_port":0,"installed":false,"app_name":"Hadoop"},"hive":null,"hbase":null,"zk":null,"status":"FAIL","installed":false,"app_name":"Data2","node_Apps":[{"node_id":6,"app_type":"dn","app_port":0,"installed":false,"app_name":"Hadoop"}]}]
+		    },
+		    proxy: {
+		        type: 'memory',
+		        reader: {
+		            type: 'json',
+		            root: 'items'
+		        }
+		    }
+		});
+
+		Ext.create('Ext.grid.Panel', {
+		    title: 'Simpsons',
+		    store: Ext.data.StoreManager.lookup('simpsonsStore'),
+		    columns: [
+      		        {header: 'ID',  dataIndex: 'node_id'},
+      		        {header: 'Name',  dataIndex: 'node_addr'},
+      		        {header: 'User',  dataIndex: 'node_user'},
+      		        {header: 'Home',  dataIndex: 'node_home'},
+			],
+		    height: 200,
+		    width: 800,
+		    renderTo: Ext.getBody()
+		});
+	});
+</script>
+</html>
