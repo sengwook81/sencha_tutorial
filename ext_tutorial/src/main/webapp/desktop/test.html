@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Ext Pilot</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js"></script>
+</head>
+<body>
+<!-- Fields required for history management -->
+<form id="history-form" class="x-hide-display">
+    <input type="hidden" id="x-history-field" />
+    <iframe id="x-history-frame"></iframe>
+</form>
+</body>
+<script type="text/javascript">
+// BackSpace Navigation 방지
+Ext.EventManager.on(document, 'keydown', function (e, t) {
+	console.log("Hash : ",Ext.History.getHash());
+    if (e.getKey() == e.BACKSPACE &&
+            (!/^input$/i.test(t.tagName) || t.disabled || t.readOnly) &&
+            (!/^textarea/i.test(t.tagName) || t.disabled || t.readOnly)) {
+    	if(Ext.History.getHash() == null)
+    	{
+    		e.stopEvent();	
+    	}
+        
+    }
+});
+
+Ext.onReady(function (){
+	Ext.History.init();
+	 
+	Ext.Loader.setConfig({
+	    enabled : true,
+	    paths: {
+	    	'Zero':'../zero'
+	    }
+	});
+});
+</script>
+<script type="text/javascript" src="./index.js"></script>
+</html>

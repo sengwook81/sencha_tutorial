@@ -1,5 +1,8 @@
 Ext.define('Dooby.view.NodeManager', {
 	extend: 'Zero.ex.form.ModelFormPanel',
+	requires: [
+	      'Dooby.view.field.HadoopField'
+	],
 	alias:'widget.nodemanager',
 	model: 'Dooby.model.Node',
 	addMode: false,
@@ -10,7 +13,7 @@ Ext.define('Dooby.view.NodeManager', {
 		type: 'anchor'
 	},
 	defaults: {
-		labelAlign: 'top',
+		labelAlign: 'left',
 		labelSeparator: '',
 		anchor: '100%',
 		padding: '20 20 0 20',
@@ -21,14 +24,25 @@ Ext.define('Dooby.view.NodeManager', {
 	items: [
 		{
 			xtype: 'textfield',
-			name: 'name',
-			fieldLabel: 'Company Name',
+			name: 'node_id',
+			fieldLabel: 'ID',
 			allowBlank: false,
-		},
-		{
+		}, {
 			xtype: 'textfield',
-			name: 'headCount',
-			fieldLabel: 'Head Count'
+			name: 'node_name',
+			fieldLabel: 'Name'
+		}, {
+			xtype: 'textfield',
+			name: 'node_user',
+			fieldLabel: 'User'
+		}, {
+			xtype: 'textfield',
+			name: 'node_home',
+			fieldLabel: 'Home'
+		}, {
+			xtype: 'hadoopappfield',
+			name: 'hadoop',
+			fieldLabel: 'Hadoop'
 		}
 	],
 

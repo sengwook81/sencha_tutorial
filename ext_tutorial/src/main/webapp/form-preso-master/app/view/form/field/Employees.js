@@ -7,6 +7,7 @@ Ext.define('FormPreso.view.form.field.Employees', {
     fieldLabel: 'Employees',
 
     initComponent: function() {
+    	console.log("Employees:",this);
         this.tpl = new Ext.XTemplate(
             '<label>', this.fieldLabel, '</label>',
             '<div class="add-icon"></div>',

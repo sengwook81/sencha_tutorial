@@ -46,6 +46,7 @@ Ext.define('FormPreso.controller.CompanyGrid', {
         if (records.length !== 1) {
             Ext.Msg.alert('Edit Error', 'Please select one company.');
         } else {
+        	console.log(records[0]);
             this.getForm().loadRecord(records[0]);
         }
         this.getForm().show();

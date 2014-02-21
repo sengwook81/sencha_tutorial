@@ -3,8 +3,9 @@
  */
 Ext.define('Dooby.model.Node', {
     extend: 'Ext.data.Model',
-
+    requires:['Dooby.model.NodeApp'],
     fields: ['node_id'
+           , 'node_name'
            , 'node_addr'
            , 'node_user'
            , 'node_password'
@@ -13,5 +14,8 @@ Ext.define('Dooby.model.Node', {
            , 'bhive'
            , 'bhbase'
            , 'bzk']	,
-	associations: [{ type: 'hasOne', model: 'NodeApp' , name: 'hadoop' }]
+   hasMany: [
+             { name: 'hadoop', model: 'Dooby.model.NodeApp' },
+	 	{ name: 'node_Apps', model: 'Dooby.model.NodeApp' }
+	 ]
 });

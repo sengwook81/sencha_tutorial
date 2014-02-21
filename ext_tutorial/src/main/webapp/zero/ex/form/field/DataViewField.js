@@ -1,8 +1,9 @@
-Ext.define('FormPreso.cmp.DataViewField', {
+Ext.define('Zero.ex.form.field.DataViewField', {
     extend: 'Ext.view.View',
     mixins: {
     	field: 'Ext.form.field.Field'
     },
+
     addIconCls: 'add-icon',
     editIconCls: 'edit-icon',
     deleteIconCls: 'delete-icon',
