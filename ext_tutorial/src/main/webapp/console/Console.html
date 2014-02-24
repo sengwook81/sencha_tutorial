@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<link rel="stylesheet" type="text/css" href="../lib/ext-4.2.1.883/examples/desktop/css/desktop.css" />
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js"></script>
+<script type="text/javascript" src="../zero/util/zero-collection.js"></script>
+</head>
+<body>
+</body>
+ <script type="text/javascript">
+	Ext.Loader.setConfig({
+	    enabled: true,
+	});
+	
+	Ext.Loader.setPath({
+	    'Ext.ux.desktop': '../lib/ext-4.2.1.883/examples/desktop/js',
+	    'MyDesktop': '../lib/ext-4.2.1.883/examples/desktop',
+	    'Zero': '../zero',
+	});
+	
+	Ext.require('ConsoleApp');
+	
+	Ext.EventManager.on(document, 'keydown', function (e, t) {
+	    if (e.getKey() == e.BACKSPACE &&
+	            (!/^input$/i.test(t.tagName) || t.disabled || t.readOnly) &&
+	            (!/^textarea/i.test(t.tagName) || t.disabled || t.readOnly)) {
+	        e.stopEvent();
+	    }
+	});
+
+	var myDesktopApp;
+	Ext.onReady(function () {
+	    myDesktopApp = Ext.create('ConsoleApp');
+	    Zero.app = myDesktopApp;
+	    Zero.app.controllers = new Zero.util.Map();
+	});
+</script>
+</html>

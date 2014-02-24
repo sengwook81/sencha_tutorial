@@ -62,58 +62,15 @@
 			}
 		}
 	})
-	/* 
-	Ext.form.Basic.override( {
-		loadRecord: function(record) {
-	        this._record = record;
-	        console.log("Load Record" , record, record.getData(),record.modelName)
-	        var model = Ext.ModelManager.getModel(record.modelName);
-	        console.log("MODEL : ",model);
-	        return this.setValues(record);
-	    },
-		setValues: function(values) {
-	        var me = this,
-	            v, vLen, val, field;
 
-	        console.log("hi~~~");
-	        function setVal(fieldId, val) {
-	            var field = me.findField(fieldId);
-	            console.log('field ',field);
-	            if (field) {
-	                field.setValue(val);
-	                if (me.trackResetOnLoad) {
-	                    field.resetOriginalValue();
-	                }
-	            }
-	        }
-
-	        // Suspend here because setting the value on a field could trigger
-	        // a layout, for example if an error gets set, or it's a display field
-	        Ext.suspendLayouts();
-	        if (Ext.isArray(values)) {
-	            // array of objects
-	            vLen = values.length;
-
-	            for (v = 0; v < vLen; v++) {
-	                val = values[v];
-
-	                setVal(val.id, val.value);
-	            }
-	        } else {
-	        	console.log(values);
-	            // object hash
-	            Ext.iterate(values, setVal);
-	        }
-	        Ext.resumeLayouts(true);
-	        return this;
-	    }
-	});
-	 */
 	Ext.onReady(function() {
 		var UserStore = Ext.create('UserStore');
 		console.log("HI",UserStore.getAt(0));
 		var values = UserStore.getAt(0);
-		 
+		var subForm = Ext.create('Ext.form.Panel',{
+			layout:'anchor',
+			
+		 });
 		var formPanel = Ext.create('Ext.form.Panel', {
 		    title: 'Simple Form',
 		    bodyPadding: 5,
@@ -141,7 +98,7 @@
 		        fieldLabel: 'Orders',
 		        name: 'orders',
 		        allowBlank: true
-		    }],
+		    },subForm],
 
 		    // Reset and Submit buttons
 		    buttons: [{
@@ -183,7 +140,18 @@
 			text:'click',
 			renderTo: Ext.getBody(),
 			handler: function () {
-				console.log("Form : " ,formPanel.getForm(),UserStore,UserStore.getAt(0).ordersStore.getAt(0));
+				console.log("Form : " ,subForm.getForm(),UserStore,UserStore.getAt(0).ordersStore.getCount());
+				console.log(formPanel.getForm().getFieldValues(true));
+				subForm.items.each(function (el) {
+					console.log("Each ",arguments);
+					subForm.remove(el);
+				});
+				
+				for(var i = 0;i<UserStore.getAt(0).ordersStore.getCount();i++)
+				{
+					subForm.add({xtype:'textfield',text:'Hello'});
+				}
+				
 				formPanel.getForm().loadRecord(UserStore.getAt(0));
 			}
 		})

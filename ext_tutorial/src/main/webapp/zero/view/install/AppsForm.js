@@ -1,0 +1,11 @@
+/**
+ * 
+ */
+Ext.define('Zero.view.install.AppsForm',{
+			extend:'Ext.form.FormPanel',
+			mixins:['Zero.util.ex.StructureFormData'],
+			layout:{
+				type:'vbox',
+				align:'stretch'
+			},
+});

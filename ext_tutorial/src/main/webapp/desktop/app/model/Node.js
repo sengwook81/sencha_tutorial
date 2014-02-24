@@ -1,5 +1,5 @@
 /**
- * 
+ * Node 관리 모델.
  */
 Ext.define('Dooby.model.Node', {
     extend: 'Ext.data.Model',
@@ -14,8 +14,8 @@ Ext.define('Dooby.model.Node', {
            , 'bhive'
            , 'bhbase'
            , 'bzk']	,
+   // 노드와 노드 어플리케이션의 관계는 1:n 관계로 정의.
    hasMany: [
-             { name: 'hadoop', model: 'Dooby.model.NodeApp' },
 	 	{ name: 'node_Apps', model: 'Dooby.model.NodeApp' }
 	 ]
 });

@@ -1,7 +1,7 @@
 /**
- * 노드 어플리케이션 모델.
+ * 
  */
-Ext.define('Dooby.model.NodeApp', {
+Ext.define('Zero.model.install.NodeApp', {
     extend: 'Ext.data.Model',
     fields: ['node_id'
            , 'app_type'
