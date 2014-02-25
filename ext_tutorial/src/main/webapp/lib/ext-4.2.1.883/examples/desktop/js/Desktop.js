@@ -301,6 +301,7 @@ Ext.define('Ext.ux.desktop.Desktop', {
         cls = cls || Ext.window.Window;
         win = me.add(new cls(cfg));
 
+        console.log("WHEN CREATE WINDOW",me.windows,win);
         me.windows.add(win);
 
         win.taskButton = me.taskbar.addTaskButton(win);
@@ -371,7 +372,13 @@ Ext.define('Ext.ux.desktop.Desktop', {
     },
 
     getWindow: function(id) {
-        return this.windows.get(id);
+        var retWin =  this.windows.get(id);
+        if(retWin) {
+        	console.log("Exists Window Id ",id  ,this.windows);
+        }
+        
+        return retWin;
+        
     },
 
     minimizeWindow: function(win) {

@@ -13,10 +13,10 @@ Ext.define('Zero.view.install.Node',{
 	id:'installnode',
 	controllers:['Zero.controller.install.NodeCTR'],
 	requires: [
-	    'Zero.store.install.Nodes'
+	    'Zero.store.install.Nodes',
     ],
     initComponent:function () {
-    	me = this;
+    	var me = this;
     	var masterGrid = me.masterGrid();
     	var detailform = me.formView();
     	
@@ -32,16 +32,23 @@ Ext.define('Zero.view.install.Node',{
     		   detailform
     		],
     	});
+    	console.log("POS 1 ");
     	me.callParent(arguments);
     	me.on('afterrender', me.registControllers, me);
     },
 	masterGrid:function () {
+		//console.log("SET GRID STORE ",Ext.StoreManager.lookup('Zero.store.install.Nodes'));
 		return Ext.create('Ext.grid.Panel',{
 			id:'nodegrid',
 			store:Ext.data.StoreManager.lookup('install_nodes'),
-			flex:1,
+			flex:0.5,
     		columns:[
-    		{
+			{
+				text:'', width:30 ,  renderer : function(value, metaData, record, rowIdx, colIdx, store, view){
+					console.log(record.associations);
+                    return record['dirty'];
+                }
+			} , {
     			text:'ID',dataIndex:'node_id',width:30
     		}, {
     			text:'HOST',dataIndex:'node_addr',width:80
@@ -62,132 +69,10 @@ Ext.define('Zero.view.install.Node',{
 		// Hadoop Node 정보를 표기하기 위한 Form 구성.
 		return  Ext.create('Zero.view.install.NodeForm');
 	},
-	buildAppTabs:function (appsStore) {
-		tabPanel = Ext.create('Ext.tab.Panel',{
-			 tabPosition: 'bottom',
-			 flex:1,
-			 bodyPadding: 10,
-			 items:[
-			        me.buildHadoopTab(),
-			        me.buildHiveTab(),
-			        me.buildHBaseTab()
-			 ],
-		});
-		return tabPanel;
-	},
-	buildHadoopTab:function () {
-		hadoopTab = Ext.create('Zero.view.install.AppsForm',{
-			title:'HADOOP',
-			flex:1,
-			app_name:'hadoop',
-			items:[
-			{
-				title	   : 'HADOOP',
-				xtype      : 'fieldcontainer',
-	            fieldLabel : 'NodeType',
-	            defaultType: 'radiofield',
-	            layout:'hbox',
-	            defaults: {
-	                flex: 1
-	            },
-	            items:[
-		            {
-						boxLabel  : 'NAME NODE',
-						name      : 'app_type',
-						inputValue: 'nn'
-		            },
-		            {
-						boxLabel  : 'SECONDARY NAME NODE',
-						name      : 'app_type',
-						inputValue: 'sn'
-		            },
-		            {
-						boxLabel  : 'DATA NODE',
-						name      : 'app_type',
-						inputValue: 'dn'
-		            }
-	            ]
-			}
-			]
-		});
-		return hadoopTab;
-	},
-	buildHiveTab:function () {
-		hiveTab = Ext.create('Zero.view.install.AppsForm',{
-			title:'HIVE',
-			flex:1,
-			app_name:'hive',
-			items:[
-			{
-				xtype:'combo',
-				name:'app_type',
-				queryMode:'local',
-				displayField:'name',
-				valueField:'code',
-				fieldLabel:'DB_TYPE',
-				editable: false,
-				store:Ext.create('Ext.data.Store', {
-				    fields: ['code', 'name'],
-				    data : [
-				        {"code":"hsql", "name":"HSQLDB"},
-				        {"code":"prostage", "name":"PROSTAGE"},
-				        {"code":"mysql", "name":"MYSQL"}
-				    ]
-				})
-			},
-			{
-				xtype:'textfield',
-				name:'app_host',
-				fieldLabel:'HOST',
-			},
-			{
-				xtype:'textfield',
-				name:'app_user',
-				fieldLabel:'USERID',
-			},
-			{
-				xtype:'textfield',
-				name:'app_passwsord',
-				fieldLabel:'PASSWORD',
-			},
-			{
-				xtype:'numberfield',
-				name:'app_port',
-				fieldLabel:'DB_PORT',
-			}
-			]
-		});
-		return hiveTab;
-	},
-	buildHBaseTab:function () {
-		hbaseTab = Ext.create('Zero.view.install.AppsForm',{
-			title:'HBASE',
-			flex:1,
-			app_name:'hbase',
-			items:[
-			{
-				xtype:'combobox',
-				name:'app_type',
-				queryMode:'local',
-				displayField:'name',
-				valueField:'code',
-				fieldLabel:'SERVER_TYPE',
-				editable: false,
-				store:Ext.create('Ext.data.Store', {
-				    fields: ['code', 'name'],
-				    data : [
-				        {"code":"hm", "name":"MASTER SERVER"},
-				        {"code":"rs", "name":"REGION SERVER"},
-				    ]
-				})
-			}
-			]
-		});
-		return hbaseTab;
-	},
 	registControllers: function(){
 	        //Instanciate the controllers into the global Applications controllers array
 	     Ext.each(this.controllers, function(control){
+	    	 	console.log(Zero.app.controllers);
 	            var controller = Zero.app.controllers.get(control);
 	            if (!controller) {
 	                controller = Ext.create(control, {
@@ -196,6 +81,7 @@ Ext.define('Zero.view.install.Node',{
 	                });
 	                Zero.app.controllers.put(control, controller);
 					controller.init(); // Run init on the controller
+					console.log("Register Controller");
 	            }
 	       		//controller.init(); //Run init on the controller         
 	        });

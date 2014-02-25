@@ -14,147 +14,95 @@
 	<div id="content"></div>
 </body>
 <script type="text/javascript">
-	Ext.define('User', {
-	    extend: 'Ext.data.Model',
-	    fields: ['id', 'name', 'email'],
-	    hasMany: {model: 'Order', name: 'orders'}
+	Ext.Loader.setConfig({
+		enabled : true,
 	});
-	
-	Ext.define('Order', {
-	    extend: 'Ext.data.Model',
-	    fields: ['id', 'user_id', 'status', 'price'],
-	    belongsTo: 'User'
+
+	Ext.Loader.setPath({
+		'Ext.ux.desktop' : '../lib/ext-4.2.1.883/examples/desktop/js',
+		'MyDesktop' : '../lib/ext-4.2.1.883/examples/desktop',
+		'Zero' : '../zero',
 	});
-	
-	Ext.define('UserStore',{
-		extend: 'Ext.data.Store' ,
-		model:'User',
-		proxy: {
-	        type: 'memory',
-	        reader: {
-	            type: 'json',
-	            root: 'items'
-	        }
-	    },
-		data:{
-				items:{
-				'id':'1'
-			   ,'name':'SengWook'
-			   ,'email':'sengwook81@gmail.com'
-			   ,'orders':[
-			      {
-			    	  'id':'goods1'
-			    	 ,'user_id':'1'
-			    	 ,'status':'normal'
-			    	 ,'price':1000
-			      } , {
-			    	  'id':'goods2'
-			    	 ,'user_id':'1'
-			    	 ,'status':'normal'
-			    	 ,'price':2000
-			      } , {
-			    	  'id':'goods2'
-			    	 ,'user_id':'1'
-			    	 ,'status':'normal'
-			    	 ,'price':3000
-			      }
-			   ]
-			}
+
+	Ext.define('NestForm', {
+		extend : 'Ext.form.FormPanel',
+		flex : 1,
+		layout : {
+			type : 'vbox',
+			align : 'stretch'
+		},
+		initComponent : function() {
+			var me = this;
+			Ext.apply(me, {
+				items : [ {
+					xtype : 'fieldcontainer',// 필드 컨테이너를 이용하여 OneRow에 여러개의 TextField배치.
+					fieldLabel : 'Node Information',
+					labelStyle : 'font-weight:bold;padding:0;',
+					layout : {
+						type : 'hbox'
+					},
+					defaultType : 'textfield',
+					labelAlign : 'top',
+					fieldDefaults : {
+						labelAlign : 'top'
+					},
+					items : [ {
+						flex : 1,
+						name : 'node_name',
+						itemId : 'node_name',
+						fieldLabel : 'NodeName',
+						allowBlank : false
+					}, {
+						flex : 1,
+						name : 'node_addr',
+						itemId : 'node_addr',
+						fieldLabel : 'NodeAddress',
+						margins : '0 0 0 5'
+					}, {
+						flex : 1,
+						name : 'node_user',
+						itemId : 'node_user',
+						fieldLabel : 'USERID',
+						allowBlank : false,
+						margins : '0 0 0 5'
+					}, {
+						flex : 1,
+						name : 'node_password',
+						itemId : 'node_password',
+						fieldLabel : 'PASSWORD',
+						allowBlank : false,
+						margins : '0 0 0 5'
+					}, {
+						width : 300,
+						name : 'node_home',
+						itemId : 'node_home',
+						fieldLabel : 'HOMEPATH',
+						allowBlank : false,
+						margins : '0 0 0 5'
+					} ]
+				} ]
+			});
+			me.callParent(arguments);
 		}
-	})
-
-	Ext.onReady(function() {
-		var UserStore = Ext.create('UserStore');
-		console.log("HI",UserStore.getAt(0));
-		var values = UserStore.getAt(0);
-		var subForm = Ext.create('Ext.form.Panel',{
-			layout:'anchor',
-			
-		 });
-		var formPanel = Ext.create('Ext.form.Panel', {
-		    title: 'Simple Form',
-		    bodyPadding: 5,
-		    width: 350,
-
-		    // The form will submit an AJAX request to this URL when submitted
-		    //url: 'save-form.php',
-
-		    // Fields will be arranged vertically, stretched to full width
-		    layout: 'anchor',
-		    defaults: {
-		        anchor: '100%'
-		    },
-		    // The fields
-		    defaultType: 'textfield',
-		    items: [{
-		        fieldLabel: 'Name',
-		        name: 'name',
-		        allowBlank: true
-		    },{
-		        fieldLabel: 'EMail',
-		        name: 'email',
-		        allowBlank: true
-		    },{
-		        fieldLabel: 'Orders',
-		        name: 'orders',
-		        allowBlank: true
-		    },subForm],
-
-		    // Reset and Submit buttons
-		    buttons: [{
-		        text: 'Reset',
-		        handler: function() {
-		            this.up('form').getForm().reset();
-		        }
-		    }, {
-		        text: 'Submit',
-		        formBind: true, //only enabled once the form is valid
-		        disabled: true,
-		        handler: function() {
-		            var form = this.up('form').getForm();
-		            if (form.isValid()) {
-		                form.submit({
-		                    success: function(form, action) {
-		                       Ext.Msg.alert('Success', action.result.msg);
-		                    },
-		                    failure: function(form, action) {
-		                        Ext.Msg.alert('Failed', action.result.msg);
-		                    }
-		                });
-		            }
-		        }
-		    }],
-		    renderTo: Ext.getBody(),
-		    listeners :{
-		    	beforeaction:function (el , action , opts) {
-		    		console.log("Before Action : " , action , opts);
-		    	} ,
-		    	render:function () {
-		    	//	console.log("Render",this.getForm(),UserStore.getAt(0));
-		    		//this
-		    		console.log("REDER FORM");
-		    	} 
-		    },
-		});
-		Ext.widget('button',{
-			text:'click',
-			renderTo: Ext.getBody(),
-			handler: function () {
-				console.log("Form : " ,subForm.getForm(),UserStore,UserStore.getAt(0).ordersStore.getCount());
-				console.log(formPanel.getForm().getFieldValues(true));
-				subForm.items.each(function (el) {
-					console.log("Each ",arguments);
-					subForm.remove(el);
-				});
-				
-				for(var i = 0;i<UserStore.getAt(0).ordersStore.getCount();i++)
-				{
-					subForm.add({xtype:'textfield',text:'Hello'});
-				}
-				
-				formPanel.getForm().loadRecord(UserStore.getAt(0));
-			}
-		})
 	});
+
+	Ext.form.Basic.override({
+		loadRecord : function(record) {
+			console.log(record);
+			this.callParent([record]);
+			return this;
+		}
+	});
+	
+	Ext.onReady(function() {
+		var store = Ext.create('Zero.store.install.Nodes');
+		var form = Ext.create('NestForm', {
+			renderTo : Ext.getBody()
+		});
+		store.load(function () {
+			form.getForm().loadRecord(store.getAt(0));
+		});
+		
+	})
 </script>
 </html>

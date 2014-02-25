@@ -109,6 +109,7 @@ Ext.define('Ext.ux.desktop.App', {
 
     createWindow: function(module) {
         var window = module.createWindow();
+        console.log("CREATE WINDOW : ",window);
         window.show();
     },
 

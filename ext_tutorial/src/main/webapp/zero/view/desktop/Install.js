@@ -18,13 +18,14 @@ Ext.define('Zero.view.desktop.Install', {
 		var desktop = this.app.getDesktop();
 		console.log(desktop);
 		var win = desktop.getWindow(me.id);
+		console.log("Is Window Exists?",win);
 		if(!win) {
 			
 			win = desktop.createWindow({
 				id:me.id,
 				title:me.title,
 				width:600,
-				height:400,
+				height:600,
 				hideMode:'offset',
 				layout:'fit',
 				items:[{
@@ -32,6 +33,7 @@ Ext.define('Zero.view.desktop.Install', {
 				}
 				]
 			});
+			console.log("Is CREATED Window Exists?",win);
 		}
 		
 		return win;

@@ -75,7 +75,7 @@ Ext.define('ConsoleApp', {
                 ]
             }),
 
-            wallpaper: 'wallpapers/Blue-Sencha.jpg',
+           // wallpaper: 'wallpapers/Blue-Sencha.jpg',
             wallpaperStretch: false
         });
     },
