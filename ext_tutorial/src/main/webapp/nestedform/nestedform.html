@@ -7,7 +7,9 @@
 	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
 <script type="text/javascript"
 	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js">
-	
+	<script type="text/javascript" src="../zero/util/zero-collection.js">
+</script>
+<script type="text/javascript" src="../zero/util/zero-util.js"></script>
 </script>
 </head>
 <body>
@@ -24,6 +26,53 @@
 		'Zero' : '../zero',
 	});
 
+	var subForm = Ext.create('Zero.util.ex.SubRecordForm', {
+		flex : 1,
+		app_name : 'hadoop',
+		name : 'hadoop',
+		trackResetOnLoad : true,
+		items : [ {
+			title : 'HADOOP',
+			xtype : 'fieldcontainer',
+			fieldLabel : 'NodeType',
+			defaultType : 'radiofield',
+			layout : 'hbox',
+			defaults : {
+				flex : 1
+			},
+			items : [ {
+				boxLabel : 'NAME NODE',
+				name : 'app_type',
+				inputValue : 'nn'
+			}, {
+				boxLabel : 'SECONDARY NODE',
+				name : 'app_type',
+				inputValue : 'sn'
+			}, {
+				boxLabel : 'DATA NODE',
+				name : 'app_type',
+				inputValue : 'dn'
+			} ]
+		} ]
+	});
+
+	var cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {
+        clicksToEdit: 1
+    });
+	
+	var subGrid = Ext.create('Zero.util.ex.SubRecordGrid', {
+		flex : 1,
+		app_name : 'node_Apps',
+		name : 'node_Apps',
+	    columns: [
+	        {header: 'ID',  dataIndex: 'node_id' ,field:{xtype:'textfield'}},
+	        {header: 'Name',  dataIndex: 'app_name', field:{xtype:'textfield'}},
+	        {header: 'PORT',  dataIndex: 'app_port', field:{xtype:'textfield'}},
+	        {header: 'TYPE',  dataIndex: 'app_type', field:{xtype:'textfield'}},
+		],
+		plugins: [cellEditing]
+	});
+
 	Ext.define('NestForm', {
 		extend : 'Ext.form.FormPanel',
 		flex : 1,
@@ -34,7 +83,14 @@
 		initComponent : function() {
 			var me = this;
 			Ext.apply(me, {
+				trackResetOnLoad : true,
 				items : [ {
+					xtype : 'checkbox',
+					boxLabel : 'HadoopInstalled',
+					name : 'bhadoop',
+					inputValue : true,
+					id : 'bhadoop'
+				}, {
 					xtype : 'fieldcontainer',// 필드 컨테이너를 이용하여 OneRow에 여러개의 TextField배치.
 					fieldLabel : 'Node Information',
 					labelStyle : 'font-weight:bold;padding:0;',
@@ -80,29 +136,340 @@
 						allowBlank : false,
 						margins : '0 0 0 5'
 					} ]
+				}, subForm ,subGrid ],
+				buttons : [ {
+					text : 'Show Store',
+					handler : function() {
+						console.log("STORE", Ext.getStore('install_nodes'));
+						var json = Ext.encode(Ext.pluck(Ext.getStore('install_nodes').data.items, 'data'));
+						console.log("JSON:", json);
+					}
+				}, {
+					text : 'Load Record',
+					handler : function() {
+						var form = this.up('form').getForm();
+						form.reset();
+						form.loadRecord(Ext.getStore('install_nodes').getAt(0));
+					}
+				}, {
+					text : 'Remove Record',
+					handler : function() {
+						var form = this.up('form').getForm();
+						//console.log(form.getRecord());
+						console.log(Ext.getStore('install_nodes').getAt(0).getHadoop());
+					}
+				}, {
+					text : 'Display Record',
+					handler : function() {
+						var form = this.up('form').getForm();
+						console.log(form.isDirty(), form, form.getRecord().dirty, form.getRecord().getChanges());
+					}
+				}, {
+					text : 'Reset',
+					handler : function() {
+						var form = this.up('form').getForm();
+						form.reset();
+						form.updateRecord();
+					}
+				}, {
+					text : 'Save',
+					handler : function() {
+						var form = this.up('form').getForm();
+						if (form.isValid()) {
+							
+							form.updateRecord();
+							console.log("Update Date",Ext.getStore('install_nodes'));
+							/*
+							console.log(Ext.getStore('install_nodes').sync, Ext.getStore('install_nodes').proxy);
+							console.log(Ext.getStore('install_nodes').getNewRecords(), Ext.getStore('install_nodes').getUpdatedRecords());
+							*/
+							Ext.getStore('install_nodes').sync();
+							console.log(form.getRecord());
+						}
+					}
 				} ]
 			});
 			me.callParent(arguments);
 		}
 	});
 
-	Ext.form.Basic.override({
-		loadRecord : function(record) {
-			console.log(record);
-			this.callParent([record]);
-			return this;
+	Ext.override(Ext.data.AbstractStore,{
+		getUpdatedRecords: function() {
+	        return this.data.filterBy(this.filterUpdated).items;
+	    },
+		sync: function() {
+		
+	        var me        = this,
+	            options   = {},
+	            toCreate  = me.getNewRecords(),
+	            toUpdate  = me.getUpdatedRecords(),
+	            toDestroy = me.getRemovedRecords(),
+	            needsSync = false;
+
+	        if (toCreate.length > 0) {
+	            options.create = toCreate;
+	            needsSync = true;
+	        }
+
+	    	console.log("Sync call",toUpdate,this.data);
+	        if (toUpdate.length > 0) {
+	            options.update = toUpdate;
+	            needsSync = true;
+	        }
+
+	        if (toDestroy.length > 0) {
+	            options.destroy = toDestroy;
+	            needsSync = true;
+	        }
+
+	        if (needsSync && me.fireEvent('beforesync', options) !== false) {
+	            me.proxy.batch(options, me.getBatchListeners());
+	        }
+	    },
+	    filterUpdated:function(item) 
+		{
+			var associationChange = false;
+			if(item['association'])
+			{
+				console.log("Item Has Association");
+				var association = item['association'];
+				for(var i = 0;i< item['association'].length ;i++) {
+					var associationItem = association[i];
+					if(associationItem.type  === 'hasOne')
+					{
+						if (item[associationItem.associationKey]) {
+							var associationRecord = eval('record.' + associationItem.getterName + '()');
+							associationChange = this.filterUpdated(associationRecord);	
+						}
+					}
+					else
+					{
+						console.log("HasMany Filter Check");
+						if (item[associationItem.associationKey]) {
+							var associationStore = eval('record.' + associationItem.storeName);
+							associationStore.each(function (record) {
+								associationChange = filterUpdated(record);
+								if(associationChange == true){
+									return false;
+								}
+							});
+						}
+					}
+					if(associationChange) {
+						break;
+					}
+				}
+			}
+
+			console.log("Filter Update Return ", item.dirty === true && item.phantom !== true && item.isValid() && associationChange,item);
+			return item.dirty === true && item.phantom !== true && item.isValid() && associationChange;	
 		}
 	});
 	
+	Ext.override(Ext.form.field.Radio, {
+		resetOriginalValue : function() {
+			//Override the original method inherited from Ext.form.field.Field: 
+			//  this.originalValue = this.getValue();
+			//  this.checkDirty();
+			console.log("resetOriginalValue : ", this, this.getManager(), this.getManager().getByName(this.name));
+			var radioName = this.name;
+			var radioformId = this.formId;
+			this.getManager().filterBy(function(item) {
+				console.log("RadioManager FilterBy : ", item, item.name === radioName);
+				return item.name === radioName && item.formId === radioformId;
+
+			}).each(function(item) {
+				console.log("Set Radio Value", item);
+				item.originalValue = item.getValue();
+				item.checkDirty();
+			});
+		}
+	});
+
+	Ext.override(Ext.form.Basic, {
+		findAssosiationForm : function(key) {
+			return this.owner.items.findBy(function(f) {
+				//console.log("Find by : ",f)
+				return f.xtype === "subrecordform" && f.name === key;
+			});
+		},
+		
+		findAssosiationGrid : function(key) {
+			return this.owner.items.findBy(function(f) {
+				//console.log("Find by : ",f)
+				return f.xtype === "subrecordgrid" && f.name === key;
+			});
+		},
+
+		// Form Data 반영.
+		updateRecord : function(record) {
+
+			// 기존의 로직 사용.
+			this.callParent([ record ]);
+			record = record || this._record;
+
+			// Association Model을 갖는 Model인경우 하위 관계 모델에 대한 처리    
+			if (record['associations'] && record['associations'].length > 0) {
+
+				// 관게 모델 목록을 순회r
+				for (key in record.associations.items) {
+					var associationItem = record.associations.items[key];
+
+					// 단일건 매치관계의 경우에만 처리. 그리드는 다른방식으로 접근.
+					if (associationItem.type === 'hasOne') {
+						// subrecordform Type의 Child
+						var subForm = this.findAssosiationForm(associationItem.name);
+						if (subForm) {
+							// 해당 관계 데이터가 존재하지 않을경우.. 만들어내야함.
+							console.log("Update SubForm : ", this, subForm.getForm());
+							var updatedRecord = null;
+							if (subForm.getForm()['_record']) {
+								subForm.updateRecord();
+							} else {
+								console.log("Has No Record Will Create");
+								var newRecord = associationItem.associatedModel.create();
+								subForm.updateRecord(newRecord);
+
+								eval('record.' + associationItem.setterName + '(newRecord);');
+							}
+						}
+						else 
+						{
+							console.log("SubForm Not Exists");
+						}
+						
+					}
+					else if(associationItem.type === 'hasMany') {
+						var subGrid = this.findAssosiationGrid(associationItem.name);
+						if (subGrid) {
+							// 해당 관계 데이터가 존재하지 않을경우.. 만들어내야함.
+							console.log("Update SubGrid : ", subGrid.getStore().getModifiedRecords());
+							subGrid.saveState();							
+							
+						}
+					}
+				}
+			}
+
+			console.log("Update Finish");
+		},
+		// Tree Structure Data Load
+		loadRecord : function(record) {
+			var me = this;
+
+			this.callParent([ record ]);
+			console.log("LOAD RECORD TRACKRESETONLOAD :", this.trackResetOnLoad, this);
+
+			// 수신데이터를 기준으로 SubForm에 해당 Data Bind
+			if (record['associations']) {
+				for (key in record.associations.items) {
+					var associationItem = record.associations.items[key];
+					// 단일건 매치관계의 경우에만 처리. 그리드는 다른방식으로 접근.
+					if (associationItem.type === 'hasOne') {
+						// 
+						var subForm = this.findAssosiationForm(associationItem.associationKey);
+						if (subForm) {
+							subForm.getForm().reset();
+							// 해당 관계 데이터가 존재하지 않을경우. Rercord 바인딩 처리하지 않음.
+							if (record[associationItem.associationKey]) {
+								var associationRecord = eval('record.' + associationItem.getterName + '()');
+
+								if (associationRecord) {
+									console.log("Find Sub Form", associationRecord);
+									subForm.getForm().loadRecord(associationRecord);
+								}
+							} else {
+								console.log("Empty Record Reset Form", subForm,record);
+							}
+							subForm.getForm().wasDirty = false;
+							console.log("DIRTY ? ", subForm.getForm());
+
+						}
+					}else if (associationItem.type === 'hasMany') {
+						var subGrid = this.findAssosiationGrid(associationItem.associationKey);
+						if (subGrid) {
+							console.log("Sub Grid LoadRecords");
+							if (record[associationItem.associationKey]) {
+								var associationStore = eval('record.' + associationItem.storeName);
+								subGrid.reconfigure(associationStore);
+							}
+						}
+					}
+				}
+			}
+			Ext.each(this.getFields().items, function(val) {
+				console.log("Fields", val.$className, val.isDirty(), val.name);
+			});
+
+			return this;
+		}
+	});
+	Ext.override(Ext.data.writer.Json, {
+		/*
+		 * This function overrides the default implementation of
+		 * json writer. Any hasMany relationships will be submitted
+		 * as nested objects
+		 */
+		getRecordData : function(record) {
+			var me = this, i, association, childStore, data = {};
+			console.log("Record Data",record);
+			data = me.callParent([ record ]);
+			
+			// 자식노드가 존재한다면 모든 자식노드의 데이터를 순회하며 처리.
+			for (var i = 0; i < record.associations.length; i++) {
+				var associationItem = record.associations.get(i);
+				// 1:N 관계의 자식관계일 경우 처리
+				if (associationItem.type == 'hasMany') {
+					// 처리결과를 배열로 담는다.
+					data[associationItem.name] = [];
+					// 해당 
+					childStore = eval('record.' + associationItem.storeName);
+					childStore.each(function(childRecord) {
+
+						//Recursively get the record data for children (depth first)
+						var childData = this.getRecordData.call(this, childRecord);
+						if (childRecord.dirty | childRecord.phantom | (childData != null)) {
+							data[associationItem.associationKey].push(childData);
+							record.setDirty();
+						}
+					}, me);
+				} else if (associationItem.type == 'hasOne') {
+					data[associationItem.associationKey] = null;
+					if (record[associationItem.name]) {
+						childRecord = eval('record.' + associationItem.getterName + '()');
+						var childData = this.getRecordData.call(this, childRecord);
+						if (childRecord.dirty | childRecord.phantom | (childData != null)) {
+							data[associationItem.associationKey] = childData;
+							record.setDirty();
+						}
+					}
+
+				}
+
+			}
+			return data;
+		}
+	});
+
 	Ext.onReady(function() {
+
 		var store = Ext.create('Zero.store.install.Nodes');
 		var form = Ext.create('NestForm', {
 			renderTo : Ext.getBody()
 		});
-		store.load(function () {
+
+		store.load(function() {
+			
 			form.getForm().loadRecord(store.getAt(0));
+			console.log("RECORD 0",store.getAt(0));
 		});
-		
-	})
+		// Empty Record Create And Load
+/* 		
+		console.log("Create New Record", store, store.model.create());
+		store.add(store.model.create());
+		console.log("0 ROW DATA", store, store.getAt(0));
+		form.getForm().loadRecord(store.getAt(0));
+ */
+	});
 </script>
 </html>

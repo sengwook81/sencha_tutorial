@@ -14,10 +14,26 @@ Ext.define('Zero.store.install.Nodes', {
 	pageSize: 10,
 	proxy : {
 		type : 'ajax',
-		url : '/ext/desktop/data/nodes.json',
+		actionMethods: {
+	            create: 'POST', read: 'GET', update: 'POST', destroy: 'GET'
+	        },
+        api:{
+            read: '/ext/desktop/data/nodes.json',
+            update: '/ext/desktop/data/update.json',
+            create: '/ext/desktop/data/create.json'
+        },
+        writer: {
+        	type:'json'
+        },
 		reader : {
 			type : 'json',
 			root : '_rslt',
-		}
+		},/*
+		writer: {
+			type:'json',
+			encode:'true',
+			writeAllFields : true
+		},*/
+		extraParams:{ hello:'world'}
 	}
 });
